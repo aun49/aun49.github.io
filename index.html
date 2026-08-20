@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TacticalTracker – ลิงก์ถาวร</title>
+<style>
+  body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;max-width:640px;margin:40px auto;padding:0 16px;line-height:1.7;color:#222}
+  .card{border:1px solid #ddd;border-radius:12px;padding:20px 24px;background:#fafafa}
+  a{color:#0a66c2;word-break:break-all}
+  code{background:#eee;padding:2px 6px;border-radius:4px;word-break:break-all;font-size:14px}
+  .hint{font-size:13px;color:#666;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h3>กำลังเปิด TacticalTracker...</h3>
+  <p id="st">กำลังโหลดข้อมูล...</p>
+  <p id="link" style="display:none">ถ้าหน้าไม่ไปต่ออัตโนมัติภายในไม่กี่วินาที ให้กดลิงก์นี้: <a id="go" href="#">-</a></p>
+  <p class="hint">หน้าเว็บนี้คือจุดรวมลิงก์ถาวร – จะพาไปยังลิงก์ที่เจ้าของเครื่องเปิดอยู่ล่าสุด</p>
+</div>
+<script>
+(function(){
+  var st=document.getElementById('st');
+  var link=document.getElementById('link');
+  var go=document.getElementById('go');
+  fetch('current.txt').then(function(r){ return r.ok ? r.text() : Promise.reject(null); })
+  .then(function(t){
+    var u=(t||'').trim();
+    if(!u) throw null;
+    go.href=u; go.textContent=u; link.style.display='block';
+    st.textContent='กำลังไปยังลิงก์ที่ใช้งานล่าสุด...';
+    setTimeout(function(){ location.replace(u); }, 500);
+  })
+  .catch(function(){
+    st.textContent='ยังไม่พร้อม: เจ้าของต้องเปิดตัวแอปไว้เกิน 1 นาที (ลิงก์ล่าสุดดูได้ที่หน้าล็อกอินฝั่งเครื่อง PC)';
+  });
+})();
+</script>
+</body>
+</html>
